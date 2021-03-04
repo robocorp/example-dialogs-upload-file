@@ -8,7 +8,7 @@ Documentation     Example robot to illustrate how to upload a file using the RPA
 ...               Collects an Excel file from the user and uses it to fill in the form at the
 ...               RobotSpareBin Industries Inc. intranet.
 Library           RPA.Dialogs
-Library           RPA.Browser
+Library           RPA.Browser.Selenium
 Library           RPA.Excel.Files
 
 *** Keywords ***
