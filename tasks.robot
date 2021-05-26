@@ -13,14 +13,13 @@ Library           RPA.Excel.Files
 
 *** Keywords ***
 Collect Excel File From User
-    Create Form    Upload Excel File
-    Add File Input    label=Upload the Excel file with sales data
+    Add heading    Upload Excel File
+    Add file input    label=Upload the Excel file with sales data
     ...    name=fileupload
-    ...    element_id=fileupload
-    ...    filetypes=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-    ...    target_directory=${CURDIR}${/}output
-    &{response}    Request Response
-    [Return]    ${response["fileupload"][0]}
+    ...    file_type=Excel files (*.xls;*.xlsx)
+    ...    destination=${CURDIR}${/}output
+    ${response}=    Run dialog
+    [Return]    ${response.fileupload}[0]
 
 *** Keywords ***
 Open The Intranet Website
