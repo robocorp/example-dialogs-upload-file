@@ -14,7 +14,8 @@ Library           RPA.Excel.Files
 *** Keywords ***
 Collect Excel File From User
     Add heading    Upload Excel File
-    Add file input    label=Upload the Excel file with sales data
+    Add file input
+    ...    label=Upload the Excel file with sales data
     ...    name=fileupload
     ...    file_type=Excel files (*.xls;*.xlsx)
     ...    destination=${CURDIR}${/}output
