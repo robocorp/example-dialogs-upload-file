@@ -10,8 +10,4 @@ This example is very suited to be used with the [Robot Assistants feature of Con
 
 <img src="images/form-ui.png" style="margin-bottom:20px">
 
-Click the link below to get to the code:
-
-[tasks.robot](./tasks.robot)
-
 > You can find more information on this example robot on [Robocorp's documentation site](https://robocorp.com/docs/development-guide/dialogs-assistant/uploading-files).
