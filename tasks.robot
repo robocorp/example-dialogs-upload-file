@@ -1,72 +1,67 @@
-## Dialogs Upload File Example Robot
-
-# This robot demonstrates the use of the [`RPA.Dialogs`](https://robocorp.com/docs/libraries/rpa-framework/rpa-dialogs) library allow the user to choose and upload an Excel file,
-# which is then used by the robot to fill a form in a web application.
-
 *** Settings ***
-Documentation     Example robot to illustrate how to upload a file using the RPA.Dialogs library.
-...               Collects an Excel file from the user and uses it to fill in the form at the
-...               RobotSpareBin Industries Inc. intranet.
+Documentation     Insert the sales data for the week and export it as a PDF.
+...               Collects the input Excel file from the user.
+Library           RPA.Browser.Selenium    auto_close=${FALSE}
 Library           RPA.Dialogs
-Library           RPA.Browser.Selenium
 Library           RPA.Excel.Files
+Library           RPA.HTTP
+Library           RPA.PDF
+
+*** Tasks ***
+Insert the sales data for the week and export it as a PDF
+    ${excel_file_path}=    Collect Excel file from the user
+    Open the intranet website
+    Log in
+    Fill the form using the data from the Excel file    ${excel_file_path}
+    Collect the results
+    Export the table as a PDF
+    [Teardown]    Log out and close the browser
 
 *** Keywords ***
-Collect Excel File From User
+Collect Excel file from the user
     Add heading    Upload Excel File
     Add file input
     ...    label=Upload the Excel file with sales data
     ...    name=fileupload
     ...    file_type=Excel files (*.xls;*.xlsx)
-    ...    destination=${CURDIR}${/}output
+    ...    destination=${OUTPUT_DIR}
     ${response}=    Run dialog
     [Return]    ${response.fileupload}[0]
 
-*** Keywords ***
-Open The Intranet Website
+Open the intranet website
     Open Available Browser    https://robotsparebinindustries.com/
 
-*** Keywords ***
-Log In
-    Input Text    id:username    maria
-    Input Password    id:password    thoushallnotpass
+Log in
+    Input Text    username    maria
+    Input Password    password    thoushallnotpass
     Submit Form
     Wait Until Page Contains Element    id:sales-form
 
-*** Keywords ***
-Fill And Submit The Form For One Person
-    [Arguments]    ${salesRep}
-    Input Text    firstname    ${salesRep}[First Name]
-    Input Text    lastname    ${salesRep}[Last Name]
-    Input Text    salesresult    ${salesRep}[Sales]
-    ${target_as_string}=    Convert To String    ${salesRep}[Sales Target]
-    Select From List By Value    salestarget    ${target_as_string}
+Fill and submit the form for one person
+    [Arguments]    ${sales_rep}
+    Input Text    firstname    ${sales_rep}[First Name]
+    Input Text    lastname    ${sales_rep}[Last Name]
+    Input Text    salesresult    ${sales_rep}[Sales]
+    Select From List By Value    salestarget    ${sales_rep}[Sales Target]
     Click Button    Submit
 
-*** Keywords ***
-Fill The Form Using The Data From An Excel File
+Fill the form using the data from the Excel file
     [Arguments]    ${excel_file_path}
     Open Workbook    ${excel_file_path}
-    ${salesReps}=    Read Worksheet As Table    header=True
+    ${sales_reps}=    Read Worksheet As Table    header=True
     Close Workbook
-    FOR    ${salesRep}    IN    @{salesReps}
-        Fill And Submit The Form For One Person    ${salesRep}
+    FOR    ${sales_rep}    IN    @{sales_reps}
+        Fill and submit the form for one person    ${sales_rep}
     END
 
-*** Keywords ***
-Collect The Results
-    Screenshot    css:div.sales-summary    ${CURDIR}${/}output${/}sales_summary.png
+Collect the results
+    Screenshot    css:div.sales-summary    ${OUTPUT_DIR}${/}sales_summary.png
 
-*** Keywords ***
-Log Out And Close The Browser
+Export the table as a PDF
+    Wait Until Element Is Visible    id:sales-results
+    ${sales_results_html}=    Get Element Attribute    id:sales-results    outerHTML
+    Html To Pdf    ${sales_results_html}    ${OUTPUT_DIR}${/}sales_results.pdf
+
+Log out and close the browser
     Click Button    Log out
     Close Browser
-
-*** Tasks ***
-Fill Robot Sparebin Intranet Sales Data From Excel File Provided By User
-    ${excel_file_path}=    Collect Excel File From User
-    Open The Intranet Website
-    Log In
-    Fill The Form Using The Data From An Excel File    ${excel_file_path}
-    Collect The Results
-    [Teardown]    Log Out And Close The Browser
