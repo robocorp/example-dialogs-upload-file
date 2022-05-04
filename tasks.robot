@@ -1,11 +1,13 @@
 *** Settings ***
-Documentation     Insert the sales data for the week and export it as a PDF.
-...               Collects the input Excel file from the user.
-Library           RPA.Browser.Selenium    auto_close=${FALSE}
-Library           RPA.Dialogs
-Library           RPA.Excel.Files
-Library           RPA.HTTP
-Library           RPA.PDF
+Documentation       Insert the sales data for the week and export it as a PDF.
+...                 Collects the input Excel file from the user.
+
+Library             RPA.Browser.Selenium    auto_close=${FALSE}
+Library             RPA.Dialogs
+Library             RPA.Excel.Files
+Library             RPA.HTTP
+Library             RPA.PDF
+
 
 *** Tasks ***
 Insert the sales data for the week and export it as a PDF
@@ -17,6 +19,7 @@ Insert the sales data for the week and export it as a PDF
     Export the table as a PDF
     [Teardown]    Log out and close the browser
 
+
 *** Keywords ***
 Collect Excel file from the user
     Add heading    Upload Excel File
@@ -26,7 +29,7 @@ Collect Excel file from the user
     ...    file_type=Excel files (*.xls;*.xlsx)
     ...    destination=${OUTPUT_DIR}
     ${response}=    Run dialog
-    [Return]    ${response.fileupload}[0]
+    RETURN    ${response.fileupload}[0]
 
 Open the intranet website
     Open Available Browser    https://robotsparebinindustries.com/
