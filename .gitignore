@@ -5,13 +5,15 @@ temp/
 .idea/
 .ipynb_checkpoints/
 */.ipynb_checkpoints/*
+.virtual_documents/
+*/.virtual_documents/*
 .vscode
 .DS_Store
 *.pyc
 *.zip
-.virtual_documents/
-*/.virtual_documents/*
+*/work-items-out/*
 testrun/*
-form.html
+.~lock*
+*.pkl
 # We want to commit the example file for users to test this out.
 !ExampleExcelFile.xlsx
