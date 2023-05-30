@@ -1,6 +1,6 @@
 # Dialogs Upload File Example Robot
 
-This robot demonstrates the use of the [`RPA.Dialogs`](https://robocorp.com/docs/libraries/rpa-framework/rpa-dialogs) library allow the user to choose and upload an Excel file which is then used by the robot to fill a form in a web application.
+This robot demonstrates the use of the [`RPA.Assistant`](https://robocorp.com/docs/libraries/rpa-framework/rpa-assistant) library that allows the user to choose and upload an Excel file which is then used by the robot to fill a form in a web application.
 
 The `ExampleExcelFile.xlsx` in the main directory of the robot contains data with the right structure and can be used to test the robot.
 

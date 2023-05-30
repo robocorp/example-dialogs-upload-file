@@ -3,7 +3,7 @@ Documentation       Insert the sales data for the week and export it as a PDF.
 ...                 Collects the input Excel file from the user.
 
 Library             RPA.Browser.Selenium    auto_close=${FALSE}
-Library             RPA.Dialogs
+Library             RPA.Assistant
 Library             RPA.Excel.Files
 Library             RPA.HTTP
 Library             RPA.PDF
@@ -22,13 +22,13 @@ Insert the sales data for the week and export it as a PDF
 
 *** Keywords ***
 Collect Excel file from the user
-    Add heading    Upload Excel File
+    Add heading    Upload Sales Data
     Add file input
-    ...    label=Upload the Excel file with sales data
+    ...    label=Choose Excel file to upload
     ...    name=fileupload
-    ...    file_type=Excel files (*.xls;*.xlsx)
-    ...    destination=${OUTPUT_DIR}
-    ${response}=    Run dialog
+    ...    file_type=xls,xlsx
+    Add Submit Buttons    buttons=Submit    default=Submit
+    ${response}=    Run dialog    height=250
     RETURN    ${response.fileupload}[0]
 
 Open the intranet website
@@ -55,6 +55,7 @@ Fill the form using the data from the Excel file
     Close Workbook
     FOR    ${sales_rep}    IN    @{sales_reps}
         Fill and submit the form for one person    ${sales_rep}
+        Wait Until Page Contains Element    firstname
     END
 
 Collect the results
